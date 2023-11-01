@@ -18,10 +18,11 @@ db = client['big_data_project']
 patients_collection = db['labels']
 
 #import dataset from csv file using pandas
-patients_df = pd.read_csv(LABEL_PATH)
+labels = pd.read_csv(LABEL_PATH)
+labels = labels[~labels.image.str.contains('downsampled')]
 
-# Convert DataFrame to a list of dictionaries
-patients_data = patients_df.to_dict(orient='records')
+# Convert DataFrame to a list of dictionaries with column names as keys and value for each row as attribute
+patients_data = labels.to_dict(orient='records')
 
 #insert multiple rows into MongoDB
 patients_collection.insert_many(patients_data)
