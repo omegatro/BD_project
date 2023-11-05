@@ -1,0 +1,127 @@
+<!-- search_results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha384-1CmRX2rRRJ7VFRfjHhgbFVzjp9LmR5FAW1oavKJpPnJwviPhGjFEUhD3l7t/ehpT" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-inline > * {
+            margin: 5px 10px;
+        }
+        .table {
+            background-color: #ffffff;
+        }
+        .table th {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Filter Search</h1>
+        <form method="GET" action="{% url 'search_metadata' %}" class="mb-5">
+            <div class="row g-3 align-items-center justify-content-center">
+                <div class="col-sm-6 col-md-3">
+                    <label for="ageMin" class="form-label">Age Min:</label>
+                    <input type="number" class="form-control" id="ageMin" name="age_min" placeholder="Age Min">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label for="ageMax" class="form-label">Age Max:</label>
+                    <input type="number" class="form-control" id="ageMax" name="age_max" placeholder="Age Max">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label for="sexSelect" class="form-label">Sex:</label>
+                    <select class="form-select" id="sexSelect" name="sex">
+                        <option value="">Select Sex</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label for="anatomicalSiteSelect" class="form-label">Anatomical Site:</label>
+                    <select multiple class="form-select" id="anatomicalSiteSelect" name="anatomical_site">
+                        {% for site in anatomical_sites %}
+                            <option value="{{ site }}" {% if site in selected_anatomical_sites %}selected{% endif %}>
+                                {{ site }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label for="diagnosisCodeSelect" class="form-label">Diagnosis Code:</label>
+                    <select multiple class="form-select" id="diagnosisCodeSelect" name="diagnosis_code">
+                        {% for code in diagnosis_options %}
+                            <option value="{{ code }}" {% if code in selected_diagnosis_codes %}selected{% endif %}>
+                                {{ code }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-6 col-md-3 d-grid">
+                    <button type="submit" class="btn btn-primary mt-4">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <h2 class="text-center mb-4">Search Results</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Image ID</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Anatomical Site</th>
+                        <th>Diagnosis Code</th>
+                        <!-- other headers as needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if metadata %}
+                        {% for item in metadata %}
+                        <tr>
+                            <td>{{ item.image }}</td>
+                            <td>{{ item.age_approx }}</td>
+                            <td>{{ item.sex }}</td>
+                            <td>{{ item.anatom_site_general }}</td>
+                            <td>{{ item.diagnosis_code }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="no-results">No results found.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Bootstrap JS and its dependencies (Popper.js and jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doJGiMiclDkBw6c/OhmD/jsuz0svHgtV0cRf4GmoVtbEbE5HHc3W83" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha384-QJm9Ljo1Fb7k/zO1oVfG6dWbErzPUpJViQb4Ty9IW35QGfSkepXrtajsae5w1z3r" crossorigin="anonymous"></script>
+</body>
+</html>

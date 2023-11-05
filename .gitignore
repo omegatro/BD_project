@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 dataset/*
 scripts/pymongo_reference.py
+.env
 
 # C extensions
 *.so
